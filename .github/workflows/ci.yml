@@ -39,9 +39,11 @@ jobs:
       - name: Semgrep scan (bloque sur ERROR)
         run: >
           semgrep scan
-          --config p/owasp-top-ten
+           --config p/owasp-top-ten
           --config p/javascript
+          --config p/nodejs
           --severity ERROR
+          --severity WARNING
           --error
           src/
 
