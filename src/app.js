@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const pingRoute = require('./ping');
 
+// nosemgrep: javascript.express.security.audit.express-check-csrf-middleware-usage.express-check-csrf-middleware-usage -- API sans cookies ni session, pas de risque CSRF
 const app = express();
 
 app.disable('x-powered-by');
