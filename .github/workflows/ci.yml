@@ -32,7 +32,6 @@ jobs:
   # ---------------------------------------------------------------
   sast:
     runs-on: ubuntu-latest
-    needs: build-test
     container:
       image: semgrep/semgrep
     steps:
@@ -52,7 +51,6 @@ jobs:
   # ---------------------------------------------------------------
   sca:
     runs-on: ubuntu-latest
-    needs: build-test
     steps:
       - uses: actions/checkout@v4
       - name: Trivy - scan des dépendances et des secrets
@@ -62,7 +60,7 @@ jobs:
           scanners: vuln,secret
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-          exit-code: '1'
+          exit-code: "1"
 
   # ---------------------------------------------------------------
   # 4. DAST : scan dynamique (OWASP ZAP) sur un environnement éphémère
@@ -70,7 +68,7 @@ jobs:
   # ---------------------------------------------------------------
   dast:
     runs-on: ubuntu-latest
-    needs: [sast, sca]
+    needs: [build-test, sast, sca]
     steps:
       - uses: actions/checkout@v4
 
