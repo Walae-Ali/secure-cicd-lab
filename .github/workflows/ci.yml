@@ -42,6 +42,7 @@ jobs:
             --config p/owasp-top-ten \
             --config p/javascript \
             --config p/nodejs \
+            --config .semgrep/rules.yml \
             --severity ERROR \
             --severity WARNING \
             --error \
