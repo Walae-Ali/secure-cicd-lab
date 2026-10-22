@@ -2,10 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const pingRoute = require('./ping');
 
-const AWS_ACCESS_KEY_ID = 'AKIAIOSFODNN7EXAMPLE';
-const AWS_SECRET_ACCESS_KEY = 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY';
 // nosemgrep: javascript.express.security.audit.express-check-csrf-middleware-usage.express-check-csrf-middleware-usage -- API sans cookies ni session, pas de risque CSRF
-
 const app = express();
 
 app.disable('x-powered-by');
