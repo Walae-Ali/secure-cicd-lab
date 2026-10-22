@@ -1,0 +1,18 @@
+{
+  "name": "secure-cicd-lab",
+  "version": "1.0.0",
+  "description": "Petit projet Express pour le TP 2 : sécurité dans un pipeline CI/CD",
+  "private": true,
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "helmet": "^8.0.0"
+  }
+}
