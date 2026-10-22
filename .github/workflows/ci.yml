@@ -37,14 +37,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Semgrep scan (bloque sur ERROR et WARNING)
-        run: |
-          semgrep scan \
-            --config p/owasp-top-ten \
-            --config p/javascript \
-            --config p/nodejs \
-            --severity ERROR \
-            --severity WARNING \
-            --error \
+        run: >
+          semgrep scan 
+            --config p/owasp-top-ten 
+            --config p/javascript 
+            --config p/nodejs 
+            --severity ERROR 
+            --severity WARNING 
+            --error 
             src/
 
   # ---------------------------------------------------------------
