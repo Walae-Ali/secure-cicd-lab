@@ -36,16 +36,16 @@ jobs:
       image: semgrep/semgrep
     steps:
       - uses: actions/checkout@v4
-      - name: Semgrep scan (bloque sur ERROR)
-        run: >
-          semgrep scan
-           --config p/owasp-top-ten
-          --config p/javascript
-          --config p/nodejs
-          --severity ERROR
-          --severity WARNING
-          --error
-          src/
+      - name: Semgrep scan (bloque sur ERROR et WARNING)
+        run: |
+          semgrep scan \
+            --config p/owasp-top-ten \
+            --config p/javascript \
+            --config p/nodejs \
+            --severity ERROR \
+            --severity WARNING \
+            --error \
+            src/
 
   # ---------------------------------------------------------------
   # 3. SCA : dépendances vulnérables + secrets (Trivy)
