@@ -42,6 +42,7 @@ jobs:
             --config p/owasp-top-ten \
             --config p/javascript \
             --config p/nodejs \
+            --config .semgrep/rules.yml \
             --severity ERROR \
             --severity WARNING \
             --error \
@@ -70,6 +71,7 @@ jobs:
   # ---------------------------------------------------------------
   dast:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: [build-test, sast, sca]
     steps:
       - uses: actions/checkout@v4
@@ -84,12 +86,12 @@ jobs:
           done
           curl -sf http://localhost:3000/health
 
-      - name: Scan ZAP baseline
+      - name: Scan ZAP full (attaque active)
         run: |
           mkdir -p zap-out && chmod 777 zap-out
           docker run --rm --network zapnet -v "$(pwd)/zap-out:/zap/wrk:rw" \
-            ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
-            -t http://app:3000 -J report.json -r report.html || true
+            ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py \
+            -t http://app:3000 -m 3 -T 20 -J report.json -r report.html || true
 
       - name: Échec si alerte HIGH
         run: |

@@ -1,0 +1,17 @@
+rules:
+  - id: lab-command-injection-exec
+    languages: [javascript]
+    severity: ERROR
+    message: >
+      Injection de commande possible : exec/execSync appelé avec une chaîne
+      construite à partir d'une entrée. Utiliser execFile avec un tableau
+      d'arguments et valider l'entrée.
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.query
+      - pattern: $REQ.body
+      - pattern: $REQ.params
+    pattern-sinks:
+      - pattern: exec(...)
+      - pattern: execSync(...)
+      - pattern: child_process.exec(...)
