@@ -4,14 +4,14 @@ Petit projet Node.js/Express pour le **TP 2 : intégration de la sécurité dans
 
 ## Contenu
 
-| Fichier | Rôle |
-|---|---|
-| `src/app.js`, `src/server.js` | API Express (`/`, `/health`, `/greet`, `/ping`) |
-| `src/ping.js` | Route `/ping` **sécurisée** (c'est elle qu'on rend vulnérable pour la PR n°1) |
-| `test/app.test.js` | Tests unitaires (runner natif de Node) |
-| `Dockerfile` | Image de l'appli, utilisée par le scan DAST |
-| `.github/workflows/ci.yml` | Pipeline : build/test → SAST (Semgrep) + SCA (Trivy) → DAST (OWASP ZAP) |
-| `demo/ping.vulnerable.js.txt` | Version vulnérable de `/ping` pour la démo |
+| Fichier                       | Rôle                                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| `src/app.js`, `src/server.js` | API Express (`/`, `/health`, `/greet`, `/ping`)                               |
+| `src/ping.js`                 | Route `/ping` **sécurisée** (c'est elle qu'on rend vulnérable pour la PR n°1) |
+| `test/app.test.js`            | Tests unitaires (runner natif de Node)                                        |
+| `Dockerfile`                  | Image de l'appli, utilisée par le scan DAST                                   |
+| `.github/workflows/ci.yml`    | Pipeline : build/test → SAST (Semgrep) + SCA (Trivy) → DAST (OWASP ZAP)       |
+| `demo/ping.vulnerable.js.txt` | Version vulnérable de `/ping` pour la démo                                    |
 
 ## Lancer en local
 
@@ -33,6 +33,7 @@ git push -u origin main
 ```
 
 Puis sur GitHub : **Settings → Branches → Add rule** sur `main` :
+
 - Require a pull request before merging
 - Require status checks to pass : `build-test`, `sast`, `sca`, `dast`
 
@@ -51,8 +52,8 @@ npm install lodash@4.17.15          # dépendance volontairement vulnérable (SC
 Ajoutez aussi un secret en dur dans `src/app.js`, par exemple :
 
 ```js
-const AWS_ACCESS_KEY_ID = 'AKIAIOSFODNN7EXAMPLE';
-const AWS_SECRET_ACCESS_KEY = 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY';
+const AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE";
+const AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
 ```
 
 ```bash
@@ -63,12 +64,12 @@ git push -u origin feat/vuln-demo
 
 Ouvrez la PR vers `main`. Résultat attendu :
 
-| Job | Résultat | Cause |
-|---|---|---|
-| `build-test` | vert | les tests passent toujours |
-| `sast` | **rouge** | injection de commande (`exec` + concaténation) |
-| `sca` | **rouge** | lodash 4.17.15 (CVE HIGH) et/ou secret détecté |
-| `dast` | non exécuté | dépend de `sast` et `sca` |
+| Job          | Résultat    | Cause                                          |
+| ------------ | ----------- | ---------------------------------------------- |
+| `build-test` | vert        | les tests passent toujours                     |
+| `sast`       | **rouge**   | injection de commande (`exec` + concaténation) |
+| `sca`        | **rouge**   | lodash 4.17.15 (CVE HIGH) et/ou secret détecté |
+| `dast`       | non exécuté | dépend de `sast` et `sca`                      |
 
 Le merge est bloqué. **Faites vos captures d'écran** (PR + logs des jobs en échec).
 
@@ -87,6 +88,6 @@ Capturez le résultat et le rapport ZAP (artefact `zap-report` dans l'onglet Act
 
 ## Limites à mentionner dans votre rapport
 
-- Le scan ZAP *baseline* est **passif** : il ne détecterait pas l'injection de commande. C'est le SAST qui l'attrape ici. Un scan actif (`zap-full-scan.py`) est plus complet mais plus long.
+- Le scan ZAP _baseline_ est **passif** : il ne détecterait pas l'injection de commande. C'est le SAST qui l'attrape ici. Un scan actif (`zap-full-scan.py`) est plus complet mais plus long.
 - `ignore-unfixed: true` évite de bloquer sur des CVE sans correctif disponible.
 - Les seuils HIGH/CRITICAL sont un compromis entre sécurité et nombre de faux positifs.

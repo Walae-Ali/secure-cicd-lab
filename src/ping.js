@@ -1,9 +1,21 @@
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 
-// VERSION VULNERABLE (démo TP 2) : injection de commande
-// Exemple d'exploitation : /ping?host=8.8.8.8;id
+// Version sécurisée :
+// - le paramètre est validé par une liste blanche de caractères
+// - execFile ne passe pas par un shell, donc pas d'injection de commande
+const HOST_PATTERN = /^[a-zA-Z0-9][a-zA-Z0-9.-]{0,252}$/;
+
 module.exports = function ping(req, res) {
-  exec('ping -c 1 ' + req.query.host, (err, stdout) => {
-    res.send(stdout);
+  const host = String(req.query.host || '');
+
+  if (!HOST_PATTERN.test(host)) {
+    return res.status(400).json({ error: 'Invalid host' });
+  }
+
+  execFile('ping', ['-c', '1', host], { timeout: 5000 }, (err, stdout) => {
+    if (err) {
+      return res.status(502).json({ error: 'Ping failed' });
+    }
+    res.type('text/plain').send(stdout);
   });
 };
